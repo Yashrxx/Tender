@@ -50,7 +50,7 @@ const Profile = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user?.email) return setLoading(false);
 
-      const res = await fetch(`https://tender-client.onrender.com/api/companyRoutes/companyProfile?email=${user.email}`, {
+      const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/companyProfile?email=${user.email}`, {
         headers: { 'auth-token': token }
       });
 
@@ -167,7 +167,7 @@ const Profile = () => {
       const endpoint = profileExists ? 'update' : 'create';
       const method = profileExists ? 'PUT' : 'POST';
 
-      const res = await fetch(`https://tender-client.onrender.com/api/companyRoutes/companyProfile/${endpoint}`, {
+      const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/companyProfile/${endpoint}`, {
         method,
         headers: {
           'auth-token': token,

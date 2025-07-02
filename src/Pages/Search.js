@@ -13,7 +13,7 @@ const Search = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const res = await fetch(`https://tender-client.onrender.com/api/companyRoutes/search?query=${query}&page=${page}`);
+        const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/search?query=${query}&page=${page}`);
         const data = await res.json();
         setCompanies(data.results || []);
         setTotalPages(data.totalPages || 1);

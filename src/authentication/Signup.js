@@ -39,7 +39,7 @@ const Signup = (props) => {
 
     try {
       setLoading(true);
-      const res = await fetch('https://tender-client.onrender.com/api/auth/createuser', {
+      const res = await fetch('https://tender-56x1.onrender.com/api/auth/createuser', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(trimmedData)

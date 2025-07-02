@@ -18,7 +18,7 @@ const Login = (props) => {
         setLoading(true);
 
         try {
-            const response = await fetch('https://tender-client.onrender.com/api/auth/login', {
+            const response = await fetch('https://tender-56x1.onrender.com/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

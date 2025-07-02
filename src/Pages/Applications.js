@@ -21,7 +21,7 @@ const Applications = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://tender-client.onrender.com/api/tenderRoutes/application', {
+      const response = await fetch('https://tender-56x1.onrender.com/api/tenderRoutes/application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
