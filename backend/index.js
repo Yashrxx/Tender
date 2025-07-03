@@ -8,7 +8,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // ✅ Sequelize DB connection
-const sequelize = require('./db');
+const { sequelize } = require('./db');  // <- keep this
+require('./models/Index');                    // ✅ this registers all models & associations
 
 // ✅ Sync models
 sequelize.sync({ alter: true })
