@@ -1,6 +1,5 @@
-// models/Tender.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db'); // your Sequelize instance
+const sequelize = require('../db');
 
 const Tender = sequelize.define('Tender', {
   title: {
@@ -31,14 +30,28 @@ const Tender = sequelize.define('Tender', {
     type: DataTypes.STRING,
     defaultValue: 'Open',
   },
-  // You’ll create associations separately using belongsTo
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  company_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true, // if not always provided
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
 }, {
   tableName: 'tenders',
-  timestamps: false // since you’re managing `createdAt` manually
+  timestamps: false
 });
+
+// associations
+const User = require('./User');
+const Company = require('./Company');
+
+Tender.belongsTo(User, { foreignKey: 'user_id' });
+Tender.belongsTo(Company, { foreignKey: 'company_id' });
 
 module.exports = Tender;

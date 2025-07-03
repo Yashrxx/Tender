@@ -1,4 +1,3 @@
-// models/User.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db'); // your Sequelize instance
 
@@ -7,7 +6,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [3] // min length 3
+      len: [3]
     }
   },
   email: {
@@ -22,7 +21,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [10] // min length 10 characters
+      len: [10]
     }
   },
   password: {
@@ -35,7 +34,14 @@ const User = sequelize.define('User', {
   }
 }, {
   tableName: 'users',
-  timestamps: false // manually handling date
+  timestamps: false
 });
+
+// --- Add associations ---
+const Company = require('./Company');
+const Tender = require('./Tender');
+
+User.hasMany(Company, { foreignKey: 'user_id' });
+User.hasMany(Tender, { foreignKey: 'user_id' });
 
 module.exports = User;

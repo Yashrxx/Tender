@@ -1,15 +1,17 @@
-// models/Company.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db'); // your Sequelize instance
+const sequelize = require('../db');
+
+// Import related models for associations
+const User = require('./User');
+const Tender = require('./Tender');
 
 const Company = sequelize.define('Company', {
-  // foreign key to User (associate this later in index/init)
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
     references: {
-      model: 'users', // should match your User table
+      model: 'users',
       key: 'id'
     }
   },
@@ -21,7 +23,9 @@ const Company = sequelize.define('Company', {
     type: DataTypes.STRING,
     unique: true,
     allowNull: true,
-    validate: { isEmail: true }
+    validate: {
+      isEmail: true
+    }
   },
   phone: {
     type: DataTypes.STRING,
@@ -57,7 +61,15 @@ const Company = sequelize.define('Company', {
   }
 }, {
   tableName: 'companies',
-  timestamps: false, // because you are managing createdAt manually
+  timestamps: false
 });
+
+// === Associations ===
+
+// A Company belongs to one User
+Company.belongsTo(User, { foreignKey: 'userId' });
+
+// A Company can have many Tenders
+Company.hasMany(Tender, { foreignKey: 'company_id' });
 
 module.exports = Company;
