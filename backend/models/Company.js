@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 // Import related models for associations
-const User = require('./User');
 const Tender = require('./Tender');
 
 const Company = sequelize.define('Company', {
@@ -63,11 +62,6 @@ const Company = sequelize.define('Company', {
   tableName: 'companies',
   timestamps: false
 });
-
-// === Associations ===
-
-// A Company belongs to one User
-Company.belongsTo(User, { foreignKey: 'userId' });
 
 // A Company can have many Tenders
 Company.hasMany(Tender, { foreignKey: 'company_id' });
