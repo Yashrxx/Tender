@@ -16,10 +16,7 @@ const Profile = () => {
     email: '', phone: '', logo: null, coverImage: null
   });
 
-  const [preview, setPreview] = useState({
-    logo: '', coverImage: ''
-  });
-
+  const [preview, setPreview] = useState({ logo: '', coverImage: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [profileExists, setProfileExists] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -201,14 +198,26 @@ const Profile = () => {
           {preview.coverImage && <img src={preview.coverImage} alt="Cover Preview" width="200" />}
         </div>
 
-        <div className="button-wrapper">
-          {(!profileExists || isEditing) ? (
-            <button type="submit" className="save-button">{profileExists ? 'Save Changes' : 'Create Profile'}</button>
-          ) : (
-            <button type="button" onClick={() => setIsEditing(true)} className="edit-button">Edit</button>
-          )}
-        </div>
+        {(!profileExists || isEditing) && (
+          <div className="button-wrapper">
+            <button type="submit" className="save-button">
+              {profileExists ? 'Save Changes' : 'Create Profile'}
+            </button>
+          </div>
+        )}
       </form>
+
+      {profileExists && !isEditing && (
+        <div className="button-wrapper">
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="edit-button"
+          >
+            Edit
+          </button>
+        </div>
+      )}
     </div>
   );
 };
