@@ -43,7 +43,7 @@ router.post('/companyProfile/create',
       const { name, website, industry, description, address, phone } = req.body;
       const userId = req.user.id;
 
-      const existing = await Company.findOne({ where: { userId } }); // ✅ Fix here
+      const existing = await Company.findOne({ where: { userId } });
       if (existing) {
         return res.status(400).json({ error: "Company profile already exists" });
       }
@@ -52,7 +52,7 @@ router.post('/companyProfile/create',
       const coverImage = req.files?.coverImage?.[0] ? await uploadToSupabase(req.files.coverImage[0], 'covers') : null;
 
       const newCompany = await Company.create({
-        userId, // ✅ Fix here
+        userId,
         email: req.user.email,
         name,
         website,
@@ -61,7 +61,7 @@ router.post('/companyProfile/create',
         address,
         phone,
         logo,
-        cover_image: coverImage
+        coverImage // ✅ Corrected key
       });
 
       res.status(201).json({ message: "Company profile created", company: newCompany });
@@ -81,13 +81,13 @@ router.put('/companyProfile/update',
       const { name, website, industry, description, address, phone } = req.body;
       const userId = req.user.id;
 
-      const company = await Company.findOne({ where: { userId } }); // ✅ Fix here
+      const company = await Company.findOne({ where: { userId } });
       if (!company) {
         return res.status(404).json({ error: "Company not found" });
       }
 
       const logo = req.files?.logo?.[0] ? await uploadToSupabase(req.files.logo[0], 'logos') : company.logo;
-      const coverImage = req.files?.coverImage?.[0] ? await uploadToSupabase(req.files.coverImage[0], 'covers') : company.cover_image;
+      const coverImage = req.files?.coverImage?.[0] ? await uploadToSupabase(req.files.coverImage[0], 'covers') : company.coverImage;
 
       await company.update({
         name,
@@ -97,7 +97,7 @@ router.put('/companyProfile/update',
         address,
         phone,
         logo,
-        cover_image: coverImage
+        coverImage // ✅ Corrected key
       });
 
       res.status(200).json({ message: "Company profile updated", company });
