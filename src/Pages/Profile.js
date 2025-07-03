@@ -4,38 +4,20 @@ import Select from 'react-select';
 
 const Profile = () => {
   const companyCategories = [
-    "Construction & Civil Works",
-    "Information Technology (IT)",
-    "Electrical Equipment & Works",
-    "Healthcare & Medical Equipment",
-    "Roads & Bridges",
-    "Education & Training",
-    "Consultancy Services",
-    "Agriculture & Allied Services",
-    "Transportation & Logistics",
-    "Telecommunications",
-    "Security Services",
-    "Water Supply & Sanitation",
-    "Office Equipment & Stationery",
-    "Environmental Services",
-    "Machinery & Industrial Supplies"
+    "Construction & Civil Works", "Information Technology (IT)", "Electrical Equipment & Works",
+    "Healthcare & Medical Equipment", "Roads & Bridges", "Education & Training",
+    "Consultancy Services", "Agriculture & Allied Services", "Transportation & Logistics",
+    "Telecommunications", "Security Services", "Water Supply & Sanitation",
+    "Office Equipment & Stationery", "Environmental Services", "Machinery & Industrial Supplies"
   ];
 
   const [formData, setFormData] = useState({
-    name: '',
-    website: '',
-    industry: '',
-    description: '',
-    address: '',
-    email: '',
-    phone: '',
-    logo: null,
-    coverImage: null
+    name: '', website: '', industry: '', description: '', address: '',
+    email: '', phone: '', logo: null, coverImage: null
   });
 
   const [preview, setPreview] = useState({
-    logo: '',
-    coverImage: ''
+    logo: '', coverImage: ''
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -45,31 +27,26 @@ const Profile = () => {
   const [coverFile, setCoverFile] = useState(null);
 
   const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user?.email) return setLoading(false);
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user?.email || !token) {
+      setLoading(false);
+      return;
+    }
 
+    try {
       const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/companyProfile?email=${user.email}`, {
         headers: { 'auth-token': token }
       });
 
-      let data = null;
-      try {
-        data = await res.json();
-      } catch { }
+      const data = await res.json();
 
       if (res.ok && data) {
         setFormData({
-          name: data.name || '',
-          website: data.website || '',
-          industry: data.industry || '',
-          description: data.description || '',
-          address: data.address || '',
-          email: data.email || user.email,
-          phone: data.phone || '',
-          logo: null,
-          coverImage: null
+          name: data.name || '', website: data.website || '', industry: data.industry || '',
+          description: data.description || '', address: data.address || '',
+          email: data.email || user.email, phone: data.phone || '',
+          logo: null, coverImage: null
         });
 
         setPreview({
@@ -80,29 +57,10 @@ const Profile = () => {
         setProfileExists(true);
         setIsEditing(false);
       } else {
-        setFormData({
-          name: '',
-          website: '',
-          industry: '',
-          description: '',
-          address: '',
-          email: user.email,
-          phone: '',
-          logo: null,
-          coverImage: null
-        });
-
-        setPreview({
-          logo: 'https://prqpioqtpsjqzdmxdnrl.supabase.co/storage/v1/object/public/company-logos//whiteDressImg-1.jpg',
-          coverImage: 'https://prqpioqtpsjqzdmxdnrl.supabase.co/storage/v1/object/public/company-coverimage//wallpaper-3.avif'
-        });
-
-        setProfileExists(false);
-        setIsEditing(true);
+        throw new Error(data?.error || 'Profile not found');
       }
-    } catch {
-      const user = JSON.parse(localStorage.getItem('user'));
-      setFormData({
+    } catch (err) {
+      const fallback = {
         name: 'yash',
         website: 'https://yashrx@gmail.com',
         industry: 'Fashion Design',
@@ -112,8 +70,9 @@ const Profile = () => {
         phone: '9789800288',
         logo: null,
         coverImage: null
-      });
+      };
 
+      setFormData(fallback);
       setPreview({
         logo: 'https://prqpioqtpsjqzdmxdnrl.supabase.co/storage/v1/object/public/company-logos//whiteDressImg-1.jpg',
         coverImage: 'https://prqpioqtpsjqzdmxdnrl.supabase.co/storage/v1/object/public/company-coverimage//wallpaper-3.avif'
@@ -140,7 +99,6 @@ const Profile = () => {
     if (!file) return;
 
     const previewURL = URL.createObjectURL(file);
-
     if (name === 'logo') {
       setFormData((prev) => ({ ...prev, logo: file }));
       setPreview((prev) => ({ ...prev, logo: previewURL }));
@@ -155,6 +113,12 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("You're not logged in. Please log in again.");
+      return;
+    }
+
     const submitData = new FormData();
     for (const key in formData) {
       if (formData[key]) {
@@ -162,16 +126,13 @@ const Profile = () => {
       }
     }
 
-    try {
-      const token = localStorage.getItem('token');
-      const endpoint = profileExists ? 'update' : 'create';
-      const method = profileExists ? 'PUT' : 'POST';
+    const endpoint = profileExists ? 'update' : 'create';
+    const method = profileExists ? 'PUT' : 'POST';
 
+    try {
       const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/companyProfile/${endpoint}`, {
         method,
-        headers: {
-          'auth-token': token,
-        },
+        headers: { 'auth-token': token },
         body: submitData
       });
 
@@ -197,32 +158,12 @@ const Profile = () => {
       <h1>Company Profile</h1>
       <p className="subtext">Manage your company's information and settings.</p>
 
-      <form
-        className="form"
-        onSubmit={handleSubmit}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') e.preventDefault();
-        }}
-      >
+      <form className="form" onSubmit={handleSubmit}>
         <label>Company Name</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Enter company name"
-          disabled={profileExists && !isEditing}
-        />
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter company name" disabled={profileExists && !isEditing} />
 
         <label>Company Website</label>
-        <input
-          type="text"
-          name="website"
-          value={formData.website}
-          onChange={handleChange}
-          placeholder="Enter website URL"
-          disabled={profileExists && !isEditing}
-        />
+        <input type="text" name="website" value={formData.website} onChange={handleChange} placeholder="Enter website URL" disabled={profileExists && !isEditing} />
 
         <label htmlFor="category">Industry</label>
         <Select
@@ -231,98 +172,43 @@ const Profile = () => {
           onChange={(selectedOption) => setFormData({ ...formData, industry: selectedOption.value })}
           placeholder="Select industry"
           isDisabled={profileExists && !isEditing}
-          styles={{
-            menuList: (base) => ({
-              ...base,
-              maxHeight: 150,
-              overflowY: 'auto',
-            }),
-          }}
+          styles={{ menuList: (base) => ({ ...base, maxHeight: 150, overflowY: 'auto' }) }}
         />
 
         <label>Company Description</label>
-        <textarea
-          rows="4"
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Enter description"
-          disabled={profileExists && !isEditing}
-        ></textarea>
+        <textarea rows="4" name="description" value={formData.description} onChange={handleChange} placeholder="Enter description" disabled={profileExists && !isEditing}></textarea>
 
         <label>Address</label>
-        <input
-          type="text"
-          name="address"
-          value={formData.address}
-          onChange={handleChange}
-          placeholder="Enter address"
-          disabled={profileExists && !isEditing}
-        />
+        <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter address" disabled={profileExists && !isEditing} />
 
         <label>Contact Email</label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter email address"
-          disabled={profileExists && !isEditing}
-        />
+        <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email address" disabled={profileExists && !isEditing} />
 
         <label>Contact Phone</label>
-        <input
-          type="text"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Enter phone number"
-          disabled={profileExists && !isEditing}
-        />
+        <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter phone number" disabled={profileExists && !isEditing} />
 
         <div className="upload-section">
           <label>Logo</label>
-          <input
-            type="file"
-            name="logo"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={profileExists && !isEditing}
-          />
-          {logoFile && <p className="filename">{logoFile.name}</p>}
+          <input type="file" name="logo" accept="image/*" onChange={handleFileChange} disabled={profileExists && !isEditing} />
+          {(logoFile || formData.logo instanceof File) && <p className="filename">{(logoFile || formData.logo).name}</p>}
           {preview.logo && <img src={preview.logo} alt="Logo Preview" width="100" />}
         </div>
 
         <div className="upload-section">
           <label>Cover Image</label>
-          <input
-            type="file"
-            name="coverImage"
-            accept="image/*"
-            onChange={handleFileChange}
-            disabled={profileExists && !isEditing}
-          />
-          {coverFile && <p className="filename">{coverFile.name}</p>}
+          <input type="file" name="coverImage" accept="image/*" onChange={handleFileChange} disabled={profileExists && !isEditing} />
+          {(coverFile || formData.coverImage instanceof File) && <p className="filename">{(coverFile || formData.coverImage).name}</p>}
           {preview.coverImage && <img src={preview.coverImage} alt="Cover Preview" width="200" />}
         </div>
 
+        <div className="button-wrapper">
+          {(!profileExists || isEditing) ? (
+            <button type="submit" className="save-button">{profileExists ? 'Save Changes' : 'Create Profile'}</button>
+          ) : (
+            <button type="button" onClick={() => setIsEditing(true)} className="edit-button">Edit</button>
+          )}
+        </div>
       </form>
-
-      <div className="button-wrapper">
-        {(!profileExists || isEditing) ? (
-          <button type="submit" className="save-button" onClick={handleSubmit}>
-            {profileExists ? 'Save Changes' : 'Create Profile'}
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="edit-button"
-          >
-            Edit
-          </button>
-        )}
-      </div>
     </div>
   );
 };

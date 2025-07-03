@@ -27,18 +27,20 @@ const Login = (props) => {
             });
 
             const json = await response.json();
-            console.log(json);
+            console.log("Login response:", json); // Debugging
 
-            if (json.success === true) {
-                setIsAuthenticated(true);
-                setUser(json.user);
-
-                localStorage.setItem('token', json.authtoken);
+            if (response.ok && json.authToken && json.user) {
+                // Save data to localStorage
+                localStorage.setItem('token', json.authToken);
                 localStorage.setItem('username', json.user.name);
                 localStorage.setItem('email', json.user.email);
                 localStorage.setItem('user', JSON.stringify(json.user));
 
-                toast.success("Submitted!", {
+                // Set context
+                setIsAuthenticated(true);
+                setUser(json.user);
+
+                toast.success("Login successful!", {
                     position: "top-center",
                     hideProgressBar: true,
                     pauseOnHover: false,
@@ -47,15 +49,16 @@ const Login = (props) => {
 
                 navigate('/tenders');
             } else {
-                console.warn("Invalid Credentials");
-                toast.error("Invalid Credentials. Please try again.");
+                toast.error("Invalid Credentials or Missing Token/User.");
             }
         } catch (error) {
             console.error("Login failed:", error);
+            toast.error("Login failed. Try again later.");
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <Fragment>
