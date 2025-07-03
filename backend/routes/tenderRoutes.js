@@ -4,8 +4,8 @@ const fetchUser = require('../middleware/fetchUser');
 
 // ✅ Import Sequelize models
 const Tender = require("../models/Tender");
-const Company = require("../models/companySchema");
-const User = require('../models/Users');
+const Company = require("../models/Company");
+const User = require('../models/User');
 
 // ✅ POST /api/tenderRoutes/application
 router.post('/application', fetchUser, async (req, res) => {

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/Users'); // Sequelize User model
+const { User } = require('../models/User'); // Sequelize User model
 const { body, validationResult } = require('express-validator');
 
 const JWT_SECRET = 'yash@isarockstar';

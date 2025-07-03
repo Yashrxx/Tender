@@ -3,7 +3,7 @@ const fs = require('fs');
 const upload = require('../middleware/upLoad');
 const fetchUser = require('../middleware/fetchUser');
 const supabase = require('../supabaseClient');
-const Company = require("../models/companySchema");
+const Company = require("../models/Company");
 
 const router = express.Router();
 
