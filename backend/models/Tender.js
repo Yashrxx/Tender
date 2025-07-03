@@ -47,11 +47,4 @@ const Tender = sequelize.define('Tender', {
   timestamps: false
 });
 
-// associations
-const User = require('./User');
-const Company = require('./Company');
-
-Tender.belongsTo(User, { foreignKey: 'user_id' });
-Tender.belongsTo(Company, { foreignKey: 'company_id' });
-
 module.exports = Tender;

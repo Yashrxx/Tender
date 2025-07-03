@@ -1,9 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-// Import related models for associations
-const Tender = require('./Tender');
-
 const Company = sequelize.define('Company', {
   userId: {
     type: DataTypes.INTEGER,
@@ -62,8 +59,5 @@ const Company = sequelize.define('Company', {
   tableName: 'companies',
   timestamps: false
 });
-
-// A Company can have many Tenders
-Company.hasMany(Tender, { foreignKey: 'company_id' });
 
 module.exports = Company;
