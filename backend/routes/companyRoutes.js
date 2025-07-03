@@ -1,24 +1,25 @@
 const express = require('express');
+const path = require('path');
 const upload = require('../middleware/upLoad');
 const fetchUser = require('../middleware/fetchUser');
 const supabase = require('../supabaseClient');
 const Company = require("../models/Company");
-const path = require('path');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
-// ✅ UPDATED Upload to Supabase from memory (no fs)
+// ✅ Upload to Supabase from memoryStorage
 const uploadToSupabase = async (file, folder = 'logos') => {
   if (!file) return null;
 
-  const { buffer, originalname, mimetype } = file;
-  const fileExt = path.extname(originalname);
-  const fileName = `${folder}/${Date.now()}${fileExt}`;
+  const buffer = file.buffer; // assumed to be from memoryStorage
+  const fileExt = path.extname(file.originalname);
+  const fileName = `${folder}/${Date.now()}-${file.originalname}`;
 
   const { data, error } = await supabase.storage
-    .from('company-logos') // ✅ Replace with your actual bucket name
+    .from('company-logos') // ✅ Use your bucket name
     .upload(fileName, buffer, {
-      contentType: mimetype,
+      contentType: file.mimetype,
       upsert: true
     });
 
@@ -27,12 +28,10 @@ const uploadToSupabase = async (file, folder = 'logos') => {
     throw error;
   }
 
-  const publicUrl = supabase
+  return supabase
     .storage
     .from('company-logos')
     .getPublicUrl(fileName).data.publicUrl;
-
-  return publicUrl;
 };
 
 // ✅ CREATE company profile
@@ -146,10 +145,10 @@ router.get('/search', async (req, res) => {
   try {
     const { count, rows } = await Company.findAndCountAll({
       where: {
-        [require('sequelize').Op.or]: [
-          { name: { [require('sequelize').Op.iLike]: `%${query}%` } },
-          { industry: { [require('sequelize').Op.iLike]: `%${query}%` } },
-          { description: { [require('sequelize').Op.iLike]: `%${query}%` } },
+        [Op.or]: [
+          { name: { [Op.iLike]: `%${query}%` } },
+          { industry: { [Op.iLike]: `%${query}%` } },
+          { description: { [Op.iLike]: `%${query}%` } },
         ],
       },
       limit,
