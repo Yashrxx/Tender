@@ -1,25 +1,38 @@
 const express = require('express');
-const fs = require('fs');
 const upload = require('../middleware/upLoad');
 const fetchUser = require('../middleware/fetchUser');
 const supabase = require('../supabaseClient');
 const Company = require("../models/Company");
+const path = require('path');
 
 const router = express.Router();
 
-// Upload logo/cover to Supabase
+// ✅ UPDATED Upload to Supabase from memory (no fs)
 const uploadToSupabase = async (file, folder = 'logos') => {
   if (!file) return null;
-  const fileBuffer = fs.readFileSync(file.path);
-  const filePath = `${folder}/${Date.now()}-${file.originalname}`;
+
+  const { buffer, originalname, mimetype } = file;
+  const fileExt = path.extname(originalname);
+  const fileName = `${folder}/${Date.now()}${fileExt}`;
 
   const { data, error } = await supabase.storage
-    .from('company-logos')
-    .upload(filePath, fileBuffer, { contentType: file.mimetype });
+    .from('company-logos') // ✅ Replace with your actual bucket name
+    .upload(fileName, buffer, {
+      contentType: mimetype,
+      upsert: true
+    });
 
-  fs.unlinkSync(file.path);
-  if (error) throw new Error(error.message);
-  return supabase.storage.from('company-logos').getPublicUrl(data.path).data.publicUrl;
+  if (error) {
+    console.error("❌ Supabase upload error:", error.message);
+    throw error;
+  }
+
+  const publicUrl = supabase
+    .storage
+    .from('company-logos')
+    .getPublicUrl(fileName).data.publicUrl;
+
+  return publicUrl;
 };
 
 // ✅ CREATE company profile
