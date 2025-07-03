@@ -12,12 +12,12 @@ const router = express.Router();
 const uploadToSupabase = async (file, folder = 'logos') => {
   if (!file) return null;
 
-  const buffer = file.buffer; // assumed to be from memoryStorage
+  const buffer = file.buffer;
   const fileExt = path.extname(file.originalname);
   const fileName = `${folder}/${Date.now()}-${file.originalname}`;
 
   const { data, error } = await supabase.storage
-    .from('company-logos') // ✅ Use your bucket name
+    .from('company-logos')
     .upload(fileName, buffer, {
       contentType: file.mimetype,
       upsert: true
@@ -43,7 +43,7 @@ router.post('/companyProfile/create',
       const { name, website, industry, description, address, phone } = req.body;
       const userId = req.user.id;
 
-      const existing = await Company.findOne({ where: { user_id: userId } });
+      const existing = await Company.findOne({ where: { userId } }); // ✅ Fix here
       if (existing) {
         return res.status(400).json({ error: "Company profile already exists" });
       }
@@ -52,7 +52,7 @@ router.post('/companyProfile/create',
       const coverImage = req.files?.coverImage?.[0] ? await uploadToSupabase(req.files.coverImage[0], 'covers') : null;
 
       const newCompany = await Company.create({
-        user_id: userId,
+        userId, // ✅ Fix here
         email: req.user.email,
         name,
         website,
@@ -81,7 +81,7 @@ router.put('/companyProfile/update',
       const { name, website, industry, description, address, phone } = req.body;
       const userId = req.user.id;
 
-      const company = await Company.findOne({ where: { user_id: userId } });
+      const company = await Company.findOne({ where: { userId } }); // ✅ Fix here
       if (!company) {
         return res.status(404).json({ error: "Company not found" });
       }
