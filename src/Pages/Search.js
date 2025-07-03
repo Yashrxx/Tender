@@ -7,11 +7,13 @@ const Search = () => {
   const [companies, setCompanies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true); // ⬅️ Loading state
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompanies = async () => {
+      setLoading(true); // Start loading
       try {
         const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/search?query=${query}&page=${page}`);
         const data = await res.json();
@@ -19,6 +21,8 @@ const Search = () => {
         setTotalPages(data.totalPages || 1);
       } catch (err) {
         console.error('Failed to fetch companies', err);
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
 
@@ -59,31 +63,41 @@ const Search = () => {
       </div>
 
       <h3>Featured Companies</h3>
-      <div className="company-grid">
-        {companies.length > 0 ? (
-          companies.map((company, index) => (
-            <div
-              key={index}
-              className="company-card"
-              onClick={() => handleCompanyClick(company)}
-            >
-              <img
-                src={
-                  company.logo
-                    ? company.logo
-                    : 'https://dummyimage.com/100x100/cccccc/000000.png&text=Logo'
-                }
-                alt={company.name}
-                style={{borderRadius: '8px',width: '100px',height: '100px',objectFit: 'cover',boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'}}/>
-
-              <h4>{company.name}</h4>
-              <p>{company.industry || company.category}</p>
-            </div>
-          ))
-        ) : (
-          <p>No companies found.</p>
-        )}
-      </div>
+      {loading ? (
+        <div className="loader"></div> // ⬅️ Loading animation
+      ) : (
+        <div className="company-grid">
+          {companies.length > 0 ? (
+            companies.map((company, index) => (
+              <div
+                key={index}
+                className="company-card"
+                onClick={() => handleCompanyClick(company)}
+              >
+                <img
+                  src={
+                    company.logo
+                      ? company.logo
+                      : 'https://dummyimage.com/100x100/cccccc/000000.png&text=Logo'
+                  }
+                  alt={company.name}
+                  style={{
+                    borderRadius: '8px',
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'cover',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                  }}
+                />
+                <h4>{company.name}</h4>
+                <p>{company.industry || company.category}</p>
+              </div>
+            ))
+          ) : (
+            <p>No companies found.</p>
+          )}
+        </div>
+      )}
 
       <div className="pagination">
         <button onClick={() => setPage((p) => Math.max(p - 1, 1))} disabled={page === 1}>

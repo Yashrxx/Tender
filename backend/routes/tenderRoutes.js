@@ -67,4 +67,23 @@ router.get('/newTender', fetchUser, async (req, res) => {
   }
 });
 
+router.get('/allTenders', async (req, res) => {
+  try {
+    const tenders = await Tender.findAll({
+      include: [
+        {
+          model: Company,
+          attributes: ['name', 'phone'], // add other fields if needed
+        }
+      ],
+      order: [['createdAt', 'DESC']] // optional: newest first
+    });
+
+    res.json(tenders);
+  } catch (err) {
+    console.error("Error fetching all tenders:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

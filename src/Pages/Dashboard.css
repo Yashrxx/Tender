@@ -1,132 +1,175 @@
-* {
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  /* margin: 0; */
-  /* padding: 40px; */
+/* Container Setup */
+.tenders-container {
+  padding: 2rem;
   background-color: #f9fafb;
 }
 
-.tenders-container {
-  max-width: 1200px;
-  margin: auto;
-  margin-top: 20px;
-}
-
+/* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .header h1 {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .new-tender {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 12px;
   background-color: #6366f1;
   color: white;
   font-weight: 500;
-  cursor: pointer;
-}
-
-.filters {
-  display: flex;
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.filters button {
-  padding: 10px 16px;
-  background-color: #e4e6f1;
+  padding: 0.6rem 1rem;
   border: none;
-  border-radius: 12px;
-  font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s;
+  list-style: none;
+  text-decoration: none;
 }
 
+.new-tender:hover {
+  background-color: #4f46e5;
+}
+
+
+.filters-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  scrollbar-width: none; /* Firefox */
+}
+
+.filters-scroll::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.category-button {
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.category-button:hover {
+  background-color: #e5e7eb;
+}
+
+.category-button.active-filter {
+  background-color: #6366f1;
+  color: white;
+  border-color: transparent;
+}
+
+
+/* Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
+  background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.06);
 }
 
-thead {
-  background-color: #f1f3f9;
-}
-
-thead th {
-  padding: 14px;
+th, td {
+  padding: 1rem;
   text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f3f4f6;
   font-weight: 600;
-  font-size: 14px;
 }
 
-tbody td {
-  padding: 16px;
-  font-size: 15px;
-  border-bottom: 1px solid #f1f3f9;
+.text-blue {
+  color: #4f46e5;
 }
 
-tbody tr:last-child td {
-  border-bottom: none;
-}
-
-.link {
-  color: #6366f1;
+/* Row Hover */
+.cursor-pointer {
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.status {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-weight: 500;
-  font-size: 13px;
+.cursor-pointer:hover {
+  background-color: #f1f5f9;
 }
 
-.status.open {
+/* Status Badge */
+.status-badge {
   background-color: #e0e7ff;
   color: #3730a3;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  display: inline-block;
 }
 
-.status.closed {
-  background-color: #f3f4f6;
-  color: #4b5563;
-}
-
-.pagination {
+/* Expandable Description */
+.dropdown-details {
+  background: #f3f4f6;
+  border-left: 4px solid #6366f1;
+  padding: 1rem;
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  line-height: 1.6;
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 30px;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
 }
 
-.pagination button {
-  padding: 8px 14px;
-  border-radius: 50%;
-  border: none;
-  background-color: #e4e6f1;
-  font-size: 14px;
-  cursor: pointer;
+.dropdown-details p {
+  margin-bottom: 0.4rem;
 }
 
-.pagination button.active,
-.pagination button:hover {
-  background-color: #6366f1;
+/* View More Button */
+.view-more-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.85rem;
   color: white;
+  background-color: #6366f1;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+  margin-top: 10px;
 }
 
-.pagination span {
-  padding: 8px 14px;
-  font-size: 14px;
-  color: #6b7280;
+.view-more-btn:hover {
+  background-color: #4f46e5;
+}
+
+.view-more-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loading-spinner {
+  margin: 2rem auto;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

@@ -1,128 +1,187 @@
-import './Dashboard.css'
+import './Dashboard.css';
+import { useEffect, useState, useContext, Fragment, useRef } from 'react';
+import { UserContext } from '../context/userContext';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
+  const { user } = useContext(UserContext);
+  const [tenders, setTenders] = useState([]);
+  const [expandedRow, setExpandedRow] = useState(null);
+  const [expandedDescriptions, setExpandedDescriptions] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const rowRefs = useRef([]);
+
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleRowClick = (index) => {
+    setExpandedRow(prev => (prev === index ? null : index));
+    setTimeout(() => {
+      rowRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  };
+
+  const toggleDescription = (index) => {
+    setExpandedDescriptions(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+  useEffect(() => {
+    const fetchCompanyTenders = async () => {
+      setLoading(true); // 👈 Start loading
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('https://tender-56x1.onrender.com/api/tenderRoutes/newTender', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'auth-token': token
+          }
+        });
+        const data = await res.json();
+        console.log("Fetched company tenders:", data);
+        setTenders(data);
+      } catch (err) {
+        console.error("Error fetching company's tenders:", err);
+      }
+      setLoading(false); // 👈 Stop loading
+    };
+    fetchCompanyTenders();
+  }, [user]);
+
+  const [loading, setLoading] = useState(true);
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A";
+    const date = new Date(dateStr);
+    return isNaN(date.getTime())
+      ? "N/A"
+      : date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+      });
+  };
+
   return (
-    <div>
-      <div className="tenders-container">
-        <div className="header">
-          <h1>Tenders</h1>
-          <button className="new-tender">New Tender</button>
-        </div>
-
-        <div className="filters">
-          <button>Status ⌄</button>
-          <button>Category ⌄</button>
-          <button>Region ⌄</button>
-          <button>Published Date ⌄</button>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Tender</th>
-              <th>Category</th>
-              <th>Region</th>
-              <th>Status</th>
-              <th>Published Date</th>
-              <th>Closing Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Construction of New Office Building</td>
-              <td className="link">Construction</td>
-              <td className="link">Midwest</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-01-15</td>
-              <td>2024-02-29</td>
-            </tr>
-            <tr>
-              <td>Supply of IT Equipment</td>
-              <td className="link">Technology</td>
-              <td className="link">Northeast</td>
-              <td><span className="status closed">Closed</span></td>
-              <td>2023-12-20</td>
-              <td>2024-01-10</td>
-            </tr>
-            <tr>
-              <td>Marketing Services for Product Launch</td>
-              <td className="link">Marketing</td>
-              <td className="link">Southeast</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-01-20</td>
-              <td>2024-03-15</td>
-            </tr>
-            <tr>
-              <td>Renovation of Existing Facility</td>
-              <td className="link">Construction</td>
-              <td className="link">Southwest</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-01-25</td>
-              <td>2024-03-30</td>
-            </tr>
-            <tr>
-              <td>Procurement of Medical Supplies</td>
-              <td className="link">Healthcare</td>
-              <td className="link">Midwest</td>
-              <td><span className="status closed">Closed</span></td>
-              <td>2023-12-10</td>
-              <td>2024-01-05</td>
-            </tr>
-            <tr>
-              <td>Consulting Services for Business Strategy</td>
-              <td className="link">Consulting</td>
-              <td className="link">Northeast</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-02-01</td>
-              <td>2024-04-15</td>
-            </tr>
-            <tr>
-              <td>Supply of Office Furniture</td>
-              <td className="link">Office Supplies</td>
-              <td className="link">Southeast</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-02-05</td>
-              <td>2024-04-30</td>
-            </tr>
-            <tr>
-              <td>Development of Mobile Application</td>
-              <td className="link">Technology</td>
-              <td className="link">Southwest</td>
-              <td><span className="status closed">Closed</span></td>
-              <td>2023-11-25</td>
-              <td>2023-12-20</td>
-            </tr>
-            <tr>
-              <td>Training Services for Employee Development</td>
-              <td className="link">Training</td>
-              <td className="link">Midwest</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-02-10</td>
-              <td>2024-05-15</td>
-            </tr>
-            <tr>
-              <td>Maintenance of Existing Infrastructure</td>
-              <td className="link">Maintenance</td>
-              <td className="link">Northeast</td>
-              <td><span className="status open">Open</span></td>
-              <td>2024-02-15</td>
-              <td>2024-05-30</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div className="pagination">
-          <button>&lt;</button>
-          <button className="active">1</button>
-          <button>2</button>
-          <button>3</button>
-          <span>...</span>
-          <button>10</button>
-          <button>&gt;</button>
-        </div>
+    <div className="tenders-container">
+      <div className="header">
+        <h1>My Tenders</h1>
+        <Link className="new-tender" to="/applications">New Tender</Link>
       </div>
-    </div>
-  )
-}
+      <div className="filters-scroll">
+        {["All",
+          "Construction & Civil Works",
+          "Information Technology (IT)",
+          "Electrical Equipment & Works",
+          "Healthcare & Medical Equipment",
+          "Roads & Bridges",
+          "Education & Training",
+          "Consultancy Services",
+          "Agriculture & Allied Services",
+          "Transportation & Logistics",
+          "Telecommunications",
+          "Security Services",
+          "Water Supply & Sanitation",
+          "Office Equipment & Stationery",
+          "Environmental Services",
+          "Machinery & Industrial Supplies"
+        ].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => handleCategoryClick(cat)}
+            className={`category-button ${selectedCategory === cat ? "active-filter" : ""}`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
-export default Dashboard
+
+      {loading ? (
+        <div className="loading-spinner"></div>
+      ) : (<table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Published</th>
+            <th>Deadline</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tenders
+            .filter((tender) =>
+              selectedCategory === "All" ? true : tender.category === selectedCategory
+            )
+            .map((tender, index) => (
+
+              <Fragment key={tender.id}>
+                <tr
+                  onClick={() => handleRowClick(index)}
+                  className="cursor-pointer"
+                  ref={el => rowRefs.current[index] = el}
+                >
+                  <td>{tender.title}</td>
+                  <td className="text-blue">{tender.category}</td>
+                  <td className="text-blue">{tender.location}</td>
+                  <td>
+                    <span className="status-badge">
+                      {tender.status}
+                    </span>
+                  </td>
+                  <td>{formatDate(tender.deadline)}</td>
+                  <td>{formatDate(tender.createdAt)}</td>
+                </tr>
+
+                {expandedRow === index && (
+                  <tr>
+                    <td colSpan="5">
+                      <div className="dropdown-details">
+                        <p>
+                          <strong>Description:</strong>{' '}
+                          {expandedDescriptions[index]
+                            ? tender.description
+                            : `${tender.description.slice(0, 200)}...`}
+                        </p>
+
+                        {tender.company ? (
+                          <>
+                            <p><strong>Company:</strong> {tender.company.name}</p>
+                            <p><strong>Phone:</strong> {tender.company.phone}</p>
+                          </>
+                        ) : (
+                          <>
+                            <p><strong>Company:</strong> Not provided</p>
+                            <p><strong>Phone:</strong> Not available</p>
+                          </>
+                        )}
+
+                        <p><strong>Budget:</strong> ₹{tender.budget}</p>
+                      </div>
+                      {tender.description.length > 200 && (
+                        <div className="view-more-container">
+                          <button
+                            className="view-more-btn"
+                            onClick={() => toggleDescription(index)}
+                          >
+                            {expandedDescriptions[index] ? 'View Less ↑' : 'View More →'}
+                          </button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
+            ))}
+        </tbody>
+      </table>
+      )}
+    </div>
+  );
+};
+
+export default Dashboard;

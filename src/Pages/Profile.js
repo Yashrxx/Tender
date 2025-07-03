@@ -148,7 +148,7 @@ const Profile = () => {
     }
   };
 
-  if (loading) return <p>Loading profile...</p>;
+  if (loading) return <div className="loading-spinner"></div>
 
   return (
     <div className="container">
