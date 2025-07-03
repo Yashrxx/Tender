@@ -6,6 +6,7 @@ const Company = sequelize.define('Company', {
     type: DataTypes.INTEGER,
     allowNull: false,
     unique: true,
+    field: 'user_id',  // <-- Add this line
     references: {
       model: 'users',
       key: 'id'
