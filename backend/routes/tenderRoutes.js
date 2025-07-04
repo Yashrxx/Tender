@@ -79,7 +79,7 @@ router.get('/allTenders', async (req, res) => {
       order: [['createdAt', 'DESC']] // optional: newest first
     });
 
-    res.json(tenders);
+    res.json(Array.isArray(tenders) ? tenders : []);
   } catch (err) {
     console.error("Error fetching all tenders:", err);
     res.status(500).json({ error: err.message });

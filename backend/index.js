@@ -27,7 +27,7 @@ if (!fs.existsSync(uploadPath)) {
 const tenderRoutes = require('./routes/tenderRoutes');
 const authRoutes = require('./routes/auth');
 const companyRoutes = require('./routes/companyRoutes');
-
+const applicationRoutes = require('./routes/applicationRoutes');
 // ✅ CORS config
 const allowedOrigins = [
   "http://localhost:3001",
@@ -59,6 +59,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/companyRoutes', companyRoutes); // multipart/form-data
 app.use('/api/tenderRoutes', tenderRoutes);
+app.use('/api/applications', applicationRoutes);
 
 // ✅ Root
 app.get("/", (req, res) => {

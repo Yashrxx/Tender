@@ -43,6 +43,7 @@ async function uploadToBucket(bucketName, fileName) {
 
     return publicData.publicUrl;
 }
+
 const categories = [
     "Construction & Civil Works",
     "Information Technology (IT)",
@@ -63,7 +64,7 @@ const categories = [
 
 async function seedData() {
     try {
-        await sequelize.sync({ force: true }); // ✅ DANGEROUS: wipes DB
+        await sequelize.sync({ alter: true });
 
         for (let i = 0; i < 20; i++) {
             const user = await User.create({
@@ -76,14 +77,17 @@ async function seedData() {
             const logoUrl = await uploadToBucket('company-logos', `logo-${i}.jpg`);
             const coverUrl = await uploadToBucket('company-coverimage', `cover-${i}-main.jpg`);
 
+            // Pick a consistent category to be used as both industry and category
+            const category = faker.helpers.arrayElement(categories);
+
             const company = await Company.create({
                 name: faker.company.name(),
                 email: faker.internet.email(),
                 phone: faker.phone.number('9#########'),
-                category: faker.helpers.arrayElement(categories),
+                category, // optional if your model has it
                 location: faker.location.city(),
                 address: faker.location.streetAddress(),
-                industry: faker.commerce.department(),
+                industry: category, // ✅ MATCHING category
                 website: faker.internet.url(),
                 description: faker.company.catchPhrase(),
                 logo: logoUrl,
@@ -102,12 +106,11 @@ async function seedData() {
                     budget: faker.number.int({ min: 50000, max: 500000 }),
                     deadline: faker.date.soon({ days: 30 }),
                     location: faker.location.city(),
-                    category: faker.helpers.arrayElement(categories), // ✅ ADD THIS LINE
+                    category, // ✅ use same category as company industry
                     coverImage: tenderCover,
                     company_id: company.id,
                     user_id: user.id,
                 });
-
             }
         }
 
