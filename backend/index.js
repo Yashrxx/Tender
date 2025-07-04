@@ -32,7 +32,7 @@ const companyRoutes = require('./routes/companyRoutes');
 const allowedOrigins = [
   "http://localhost:3001",
   "https://yashrxx.github.io",
-  "https://tender-backend.onrender.com"
+  "https://tender-56x1.onrender.com"
 ];
 
 app.use(

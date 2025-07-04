@@ -1,9 +1,7 @@
 import { Fragment, useContext, useEffect, useState, useRef } from 'react';
 import './Tenders.css';
-import { UserContext } from '../context/userContext';
 
 const Tenders = () => {
-  const { user } = useContext(UserContext);
   const [allTenders, setAllTenders] = useState([]);
   const [filteredTenders, setFilteredTenders] = useState([]);
   const [expandedRow, setExpandedRow] = useState(null);

@@ -59,11 +59,11 @@ const Navbar = (props) => {
                                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
                             </li>
                         )}
-                        {isAuthenticated && (
+                        {/* {isAuthenticated && (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/company/:id">companyDetails</Link>
                             </li>
-                        )}
+                        )} */}
                         <li className="nav-item">
                             <Link className="nav-link" aria-disabled="true" to="/about" >AboutUs</Link>
                         </li>
