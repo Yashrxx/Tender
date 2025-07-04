@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/Tender/static/css/main.f8723d79.css",
-    "main.js": "/Tender/static/js/main.f5634af3.js",
+    "main.css": "/Tender/static/css/main.4127e7d0.css",
+    "main.js": "/Tender/static/js/main.aa4835d4.js",
     "static/js/453.29baae0c.chunk.js": "/Tender/static/js/453.29baae0c.chunk.js",
     "static/media/TAT_Logo.jpeg": "/Tender/static/media/TAT_Logo.f3506ade23c4ee9b2fa1.jpeg",
     "index.html": "/Tender/index.html",
-    "main.f8723d79.css.map": "/Tender/static/css/main.f8723d79.css.map",
-    "main.f5634af3.js.map": "/Tender/static/js/main.f5634af3.js.map",
+    "main.4127e7d0.css.map": "/Tender/static/css/main.4127e7d0.css.map",
+    "main.aa4835d4.js.map": "/Tender/static/js/main.aa4835d4.js.map",
     "453.29baae0c.chunk.js.map": "/Tender/static/js/453.29baae0c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f8723d79.css",
-    "static/js/main.f5634af3.js"
+    "static/css/main.4127e7d0.css",
+    "static/js/main.aa4835d4.js"
   ]
 }
