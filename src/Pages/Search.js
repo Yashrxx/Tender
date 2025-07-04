@@ -2,18 +2,18 @@ import './Search.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Search = () => {
+const Search = (props) => {
   const [query, setQuery] = useState('');
   const [companies, setCompanies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true); // ⬅️ Loading state
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/search?query=${encodeURIComponent(query)}&page=${page}`);
         const data = await res.json();
@@ -22,7 +22,7 @@ const Search = () => {
       } catch (err) {
         console.error('Failed to fetch companies', err);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     };
 
@@ -39,7 +39,7 @@ const Search = () => {
   };
 
   return (
-    <div className="company-page">
+    <div className="company-page" data-mode={props.mode}>
       <h1>Find Companies</h1>
 
       <input
@@ -49,6 +49,7 @@ const Search = () => {
         value={query}
         onChange={handleInputChange}
       />
+
       <h3>Browse by Industry</h3>
       <div className="industry-tags">
         {[
@@ -76,7 +77,7 @@ const Search = () => {
 
       <h3>Featured Companies</h3>
       {loading ? (
-        <div className="loader"></div> // ⬅️ Loading animation
+        <div className="loader"></div>
       ) : (
         <div className="company-grid">
           {companies.length > 0 ? (

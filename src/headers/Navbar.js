@@ -61,14 +61,9 @@ const Navbar = (props) => {
                         )}
                         {isAuthenticated && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="/application">Application</Link>
+                                <Link className="nav-link" to="/analytics">Analytics</Link>
                             </li>
                         )}
-                        {/* {isAuthenticated && (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/company/:id">companyDetails</Link>
-                            </li>
-                        )} */}
                         <li className="nav-item">
                             <Link className="nav-link" aria-disabled="true" to="/about" >AboutUs</Link>
                         </li>

@@ -8,7 +8,6 @@ const Application = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   // Fetch tender details
   useEffect(() => {
     const fetchTender = async () => {
@@ -64,7 +63,12 @@ const Application = () => {
         <>
           <h1>Apply for Tender: {tender.title}</h1>
           <p><strong>Description:</strong> {tender.description}</p>
-          <p><strong>Deadline:</strong> {tender.deadline}</p>
+          <p><strong>Deadline:</strong> {new Date(tender.deadline).toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })}</p>
+
           <p><strong>Budget:</strong> ₹{tender.budget}</p>
           <p><strong>Location:</strong> {tender.location}</p>
 

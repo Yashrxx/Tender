@@ -2,7 +2,7 @@ import './Profile.css';
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-const Profile = () => {
+const Profile = (props) => {
   const companyCategories = [
     "Construction & Civil Works", "Information Technology (IT)", "Electrical Equipment & Works",
     "Healthcare & Medical Equipment", "Roads & Bridges", "Education & Training",
@@ -151,18 +151,18 @@ const Profile = () => {
   if (loading) return <div className="loading-spinner"></div>
 
   return (
-    <div className="container">
-      <h1>Company Profile</h1>
-      <p className="subtext">Manage your company's information and settings.</p>
+    <div className="container" style={{ backgroundColor: props.mode === 'dark' ? '#4b5563' : 'white'}}>
+      <h1 style={{ color: props.mode === 'dark' ? 'white' : 'black', fontWeight: "bold" }}>Company Profile</h1>
+      <p className="subtext" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Manage your company's information and settings.</p>
 
       <form className="form" onSubmit={handleSubmit}>
-        <label>Company Name</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Company Name</label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Enter company name" disabled={profileExists && !isEditing} />
 
-        <label>Company Website</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Company Website</label>
         <input type="text" name="website" value={formData.website} onChange={handleChange} placeholder="Enter website URL" disabled={profileExists && !isEditing} />
 
-        <label htmlFor="category">Industry</label>
+        <label htmlFor="category" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Industry</label>
         <Select
           options={companyCategories.map(cat => ({ value: cat, label: cat }))}
           value={formData.industry ? { value: formData.industry, label: formData.industry } : null}
@@ -172,27 +172,27 @@ const Profile = () => {
           styles={{ menuList: (base) => ({ ...base, maxHeight: 150, overflowY: 'auto' }) }}
         />
 
-        <label>Company Description</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Company Description</label>
         <textarea rows="4" name="description" value={formData.description} onChange={handleChange} placeholder="Enter description" disabled={profileExists && !isEditing}></textarea>
 
-        <label>Address</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Address</label>
         <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Enter address" disabled={profileExists && !isEditing} />
 
-        <label>Contact Email</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Contact Email</label>
         <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Enter email address" disabled={profileExists && !isEditing} />
 
-        <label>Contact Phone</label>
+        <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Contact Phone</label>
         <input type="text" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter phone number" disabled={profileExists && !isEditing} />
 
         <div className="upload-section">
-          <label>Logo</label>
+          <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Logo</label>
           <input type="file" name="logo" accept="image/*" onChange={handleFileChange} disabled={profileExists && !isEditing} />
           {(logoFile || formData.logo instanceof File) && <p className="filename">{(logoFile || formData.logo).name}</p>}
           {preview.logo && <img src={preview.logo} alt="Logo Preview" width="100" />}
         </div>
 
         <div className="upload-section">
-          <label>Cover Image</label>
+          <label style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Cover Image</label>
           <input type="file" name="coverImage" accept="image/*" onChange={handleFileChange} disabled={profileExists && !isEditing} />
           {(coverFile || formData.coverImage instanceof File) && <p className="filename">{(coverFile || formData.coverImage).name}</p>}
           {preview.coverImage && <img src={preview.coverImage} alt="Cover Preview" width="200" />}

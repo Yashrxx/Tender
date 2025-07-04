@@ -2,7 +2,7 @@ import './ApplyTender.css';
 import { useState } from 'react';
 import Select from 'react-select';
 
-const ApplyTender = () => {
+const ApplyTender = (props) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -114,11 +114,11 @@ const ApplyTender = () => {
 
   const [loading, setLoading] = useState(false);
   return (
-    <div className="tender-container">
-      <h1>Create New Tender</h1>
+    <div className="tender-container" style={{ backgroundColor: props.mode === 'dark' ? '#4b5563' : 'white'}}>
+      <h1 style={{ color: props.mode === 'dark' ? 'white' : 'black', fontWeight: "bold" }}>Create New Tender</h1>
       <form className="tender-form" onSubmit={handleSubmit}>
 
-        <label htmlFor="title">Tender Title</label>
+        <label htmlFor="title" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Tender Title</label>
         <input
           type="text"
           id="title"
@@ -129,7 +129,7 @@ const ApplyTender = () => {
           required
         />
 
-        <label htmlFor="description">Description</label>
+        <label htmlFor="description" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Description</label>
         <textarea
           id="description"
           name="description"
@@ -140,7 +140,7 @@ const ApplyTender = () => {
           required
         />
 
-        <label htmlFor="deadline">Deadline</label>
+        <label htmlFor="deadline" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Deadline</label>
         <input
           type="date"
           id="deadline"
@@ -150,7 +150,7 @@ const ApplyTender = () => {
           required
         />
 
-        <label htmlFor="budget">Budget</label>
+        <label htmlFor="budget" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Budget</label>
         <input
           type="number"
           id="budget"
@@ -161,7 +161,7 @@ const ApplyTender = () => {
           required
         />
 
-        <label htmlFor="category">Category</label>
+        <label htmlFor="category" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Category</label>
         <Select
           options={tenderCategories.map(cat => ({ value: cat, label: cat }))}
           value={formData.category ? { value: formData.category, label: formData.category } : null}
@@ -178,7 +178,7 @@ const ApplyTender = () => {
           }}
         />
 
-        <label htmlFor="location">Location</label>
+        <label htmlFor="location" style={{ color: props.mode === 'dark' ? 'white' : 'black'}}>Location</label>
         <Select
           id="location"
           name="location"
@@ -203,7 +203,7 @@ const ApplyTender = () => {
           </button>
         </div>
 
-        {loading ? <div style={{ marginTop: '10px' }}><h6 style={{ display: 'flex', justifyContent: "center" }}>This may take a few seconds due to hosting on free services of github</h6></div> : ""}
+        {loading ? <div style={{ marginTop: '10px' }}><h6 style={{ display: 'flex', justifyContent: "center" ,color: props.mode === 'dark' ? 'white' : 'black'}}>This may take a few seconds due to hosting on free services of github</h6></div> : ""}
       </form>
     </div>
   );

@@ -6,14 +6,14 @@
 .company-page {
   max-width: 1200px;
   margin: auto;
-  padding: 40px 20px; /* Add padding for mobile */
+  padding: 40px 20px;
 }
 
 .company-page h1 {
   font-size: 36px;
   font-weight: 700;
   margin-bottom: 24px;
-  text-align: center; /* Center heading */
+  text-align: center;
 }
 
 .search-bar {
@@ -45,7 +45,7 @@
 }
 
 .industry-tags span {
-  background-color: #f1f5f9; /* Light indigo */
+  background-color: #f1f5f9;
   padding: 0.6rem 1rem;
   border-radius: 999px;
   font-size: 0.95rem;
@@ -89,6 +89,7 @@
   min-height: 200px;
   padding: 10px;
 }
+
 .company-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
@@ -152,4 +153,65 @@
   .company-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* 🌙 DARK MODE */
+[data-mode="dark"] .company-page {
+  background-color: #1e1e2f;
+  color: #e4e4e7;
+}
+
+[data-mode="dark"] h1,
+[data-mode="dark"] h3,
+[data-mode="dark"] h4,
+[data-mode="dark"] p {
+  color: #f3f4f6;
+}
+
+[data-mode="dark"] .search-bar {
+  background-color: #3b3f5c;
+  color: #b0b3d6; /* light tone matching filter buttons */
+  border: 1px solid #2c2f48;
+}
+
+[data-mode="dark"] .search-bar::placeholder {
+  color: #b0b3d6;
+  opacity: 1;
+}
+
+[data-mode="dark"] .industry-tags span {
+  background-color: #3b3f5c;
+  color: #e0e7ff;
+}
+
+[data-mode="dark"] .industry-tags span:hover {
+  background-color: #4f46e5;
+  color: white;
+}
+
+[data-mode="dark"] .company-card {
+  background-color: #2c2f48;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+[data-mode="dark"] .company-card h4,
+[data-mode="dark"] .company-card p {
+  color: #d1d5db;
+}
+
+[data-mode="dark"] .pagination button {
+  background-color: #3b3f5c;
+  color: #e0e7ff;
+}
+
+[data-mode="dark"] .pagination button.active,
+[data-mode="dark"] .pagination button:hover {
+  background-color: #6366f1;
+  color: white;
+}
+
+[data-mode="dark"] .loader {
+  border-top-color: #6366f1;
 }

@@ -1,4 +1,4 @@
-import { Fragment , useEffect, useState, useRef } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 import './Tenders.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,8 +14,8 @@ const Tenders = () => {
     status: 'All',
     date: 'All'
   });
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const rowRefs = useRef([]);
 
   useEffect(() => {
@@ -98,9 +98,9 @@ const Tenders = () => {
     }));
   };
 
-  const handleApply = async (tenderId) => {
-  navigate(`/apply/${tenderId}`)
-    }
+  const handleApply = (tenderId) => {
+    navigate(`/apply/${tenderId}`);
+  };
 
   const uniqueCategories = ['All', ...new Set(allTenders.map(t => t.category).filter(Boolean))];
   const uniqueLocations = ['All', ...new Set(allTenders.map(t => t.location).filter(Boolean))];
@@ -172,7 +172,6 @@ const Tenders = () => {
                   <th>Apply</th>
                 </tr>
               </thead>
-
               <tbody>
                 {filteredTenders.map((tender, index) => {
                   const isClosed = new Date(tender.deadline) < new Date();
@@ -210,10 +209,13 @@ const Tenders = () => {
                             <div className="dropdown-details">
                               <p>
                                 <strong>Description:</strong>{' '}
-                                {expandedDescriptions[index]
+                                {tender.description.length <= 200
                                   ? tender.description
-                                  : `${tender.description.slice(0, 200)}...`}
+                                  : (expandedDescriptions[index]
+                                    ? tender.description
+                                    : `${tender.description.slice(0, 200)}...`)}
                               </p>
+
                               {tender.company ? (
                                 <>
                                   <p><strong>Company:</strong> {tender.company.name}</p>

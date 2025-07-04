@@ -1,25 +1,16 @@
 import './Dashboard.css';
-import { useEffect, useState, useContext, Fragment, useRef } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import { Link } from 'react-router-dom';
 
-const Dashboard = () => {
+const Dashboard = ({mode}) => {
   const { user } = useContext(UserContext);
   const [tenders, setTenders] = useState([]);
-  const [expandedRow, setExpandedRow] = useState(null);
   const [expandedDescriptions, setExpandedDescriptions] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const rowRefs = useRef([]);
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-  };
-
-  const handleRowClick = (index) => {
-    setExpandedRow(prev => (prev === index ? null : index));
-    setTimeout(() => {
-      rowRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 50);
   };
 
   const toggleDescription = (index) => {
@@ -30,7 +21,7 @@ const Dashboard = () => {
   };
   useEffect(() => {
     const fetchCompanyTenders = async () => {
-      setLoading(true); // 👈 Start loading
+      setLoading(true);
       try {
         const token = localStorage.getItem('token');
         const res = await fetch('https://tender-56x1.onrender.com/api/tenderRoutes/newTender', {
@@ -65,13 +56,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="tenders-container">
+    <div className={`tenders-container ${mode === 'dark' ? 'dark-mode' : ''}`}>
       <div className="header">
         <h1>My Tenders</h1>
         <Link className="new-tender" to="/applications">New Tender</Link>
       </div>
+
       <div className="filters-scroll">
-        {["All",
+        {[
+          "All",
           "Construction & Civil Works",
           "Information Technology (IT)",
           "Electrical Equipment & Works",
@@ -98,87 +91,65 @@ const Dashboard = () => {
         ))}
       </div>
 
-
       {loading ? (
         <div className="loading-spinner"></div>
-      ) : (<table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Published</th>
-            <th>Deadline</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tenders
-            .filter((tender) =>
+      ) : (
+        <div className="tender-cards-container">
+          {
+            tenders.filter(tender =>
               selectedCategory === "All" ? true : tender.category === selectedCategory
-            )
-            .map((tender, index) => (
+            ).length === 0 ? (
+              <div style={{ textAlign: 'center', width: '100%', padding: '2rem', color: '#6b7280' }}>
+                <p style={{ fontSize: '1.1rem' }}>🚫 No tenders found for <strong>{selectedCategory}</strong>.</p>
+              </div>
+            ) : (
+              tenders
+                .filter(tender =>
+                  selectedCategory === "All" ? true : tender.category === selectedCategory
+                )
+                .map((tender, index) => (
+                  <div className="tender-card" key={tender._id || index}>
+                    <div className="card-header">
+                      <h3>{tender.title}</h3>
+                      <span className={`status-chip ${tender.status.toLowerCase()}`}>
+                        {tender.status}
+                      </span>
+                    </div>
 
-              <Fragment key={tender.id}>
-                <tr
-                  onClick={() => handleRowClick(index)}
-                  className="cursor-pointer"
-                  ref={el => rowRefs.current[index] = el}
-                >
-                  <td>{tender.title}</td>
-                  <td className="text-blue">{tender.category}</td>
-                  <td className="text-blue">{tender.location}</td>
-                  <td>
-                    <span className="status-badge">
-                      {tender.status}
-                    </span>
-                  </td>
-                  <td>{formatDate(tender.deadline)}</td>
-                  <td>{formatDate(tender.createdAt)}</td>
-                </tr>
+                    <p className="category-chip">{tender.category}</p>
 
-                {expandedRow === index && (
-                  <tr>
-                    <td colSpan="5">
-                      <div className="dropdown-details">
-                        <p>
-                          <strong>Description:</strong>{' '}
-                          {expandedDescriptions[index]
-                            ? tender.description
-                            : `${tender.description.slice(0, 200)}...`}
-                        </p>
+                    <div className="card-body">
+                      <p><strong>Location:</strong> {tender.location}</p>
+                      <p><strong>Deadline:</strong> {formatDate(tender.deadline)}</p>
+                      <p><strong>Published:</strong> {formatDate(tender.createdAt)}</p>
+                      <p><strong>Budget:</strong> ₹{tender.budget}</p>
 
-                        {tender.company ? (
-                          <>
-                            <p><strong>Company:</strong> {tender.company.name}</p>
-                            <p><strong>Phone:</strong> {tender.company.phone}</p>
-                          </>
-                        ) : (
-                          <>
-                            <p><strong>Company:</strong> Not provided</p>
-                            <p><strong>Phone:</strong> Not available</p>
-                          </>
-                        )}
-
-                        <p><strong>Budget:</strong> ₹{tender.budget}</p>
-                      </div>
-                      {tender.description.length > 200 && (
-                        <div className="view-more-container">
-                          <button
-                            className="view-more-btn"
-                            onClick={() => toggleDescription(index)}
-                          >
-                            {expandedDescriptions[index] ? 'View Less ↑' : 'View More →'}
-                          </button>
-                        </div>
+                      {tender.company && (
+                        <>
+                          <p><strong>Company:</strong> {tender.company.name}</p>
+                          <p><strong>Phone:</strong> {tender.company.phone}</p>
+                        </>
                       )}
-                    </td>
-                  </tr>
-                )}
-              </Fragment>
-            ))}
-        </tbody>
-      </table>
+                    </div>
+
+                    {tender.description.length > 200 ? (
+                      <button onClick={() => toggleDescription(index)} className="view-more-btn">
+                        {expandedDescriptions[index] ? "View Less ↑" : "View More →"}
+                      </button>
+                    ) : (
+                      <p className="description"><strong>Description:</strong> {tender.description}</p>
+                    )}
+
+                    {expandedDescriptions[index] && (
+                      <div className="description">
+                        <strong>Description:</strong> {tender.description}
+                      </div>
+                    )}
+                  </div>
+                ))
+            )
+          }
+        </div>
       )}
     </div>
   );

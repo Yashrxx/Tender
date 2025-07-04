@@ -28,6 +28,8 @@ const tenderRoutes = require('./routes/tenderRoutes');
 const authRoutes = require('./routes/auth');
 const companyRoutes = require('./routes/companyRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
+const statsRoutes = require('./routes/statsRoute');
+
 // ✅ CORS config
 const allowedOrigins = [
   "http://localhost:3001",
@@ -60,6 +62,7 @@ app.use('/api/companies', require('./routes/companyRoutes'));
 app.use('/api/companyRoutes', companyRoutes); // multipart/form-data
 app.use('/api/tenderRoutes', tenderRoutes);
 app.use('/api/applications', applicationRoutes);
+app.use('/api/stats', statsRoutes);
 
 // ✅ Root
 app.get("/", (req, res) => {
