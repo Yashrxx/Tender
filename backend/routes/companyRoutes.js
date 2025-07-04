@@ -139,7 +139,7 @@ router.get('/all', async (req, res) => {
 router.get('/search', async (req, res) => {
   const query = req.query.query || '';
   const page = parseInt(req.query.page) || 1;
-  const limit = 6;
+  const limit = 12;
   const offset = (page - 1) * limit;
 
   try {
