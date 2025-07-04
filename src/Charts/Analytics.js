@@ -16,7 +16,7 @@ const Analytics = (props) => {
   }, []);
 
   const fetchStats = async () => {
-    const res = await axios.get('https://your-api-url.com/api/stats');
+    const res = await axios.get('https://tender-56x1.onrender.com/api/stats');
     setStats(res.data);
   };
 

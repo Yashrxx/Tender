@@ -4,6 +4,7 @@ const router = express.Router();
 const fetchUser = require('../middleware/fetchUser');
 const Application = require('../models/Application');
 const Company = require('../models/Company');
+const Tender = require('../models/Tender');
 
 // POST route to apply
 router.post('/', fetchUser, async (req, res) => {
@@ -13,6 +14,9 @@ router.post('/', fetchUser, async (req, res) => {
 
     const company = await Company.findOne({ where: { user_id: userId } });
     if (!company) return res.status(404).json({ error: 'Company not found' });
+
+    const tenderExists = await Tender.findByPk(tenderId); // ✅ NEW
+    if (!tenderExists) return res.status(404).json({ error: 'Tender not found' });
 
     const newApp = await Application.create({
       tender_id: tenderId,
