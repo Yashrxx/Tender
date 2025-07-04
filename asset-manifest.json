@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/Tender/static/css/main.1628d6cf.css",
-    "main.js": "/Tender/static/js/main.aba8650c.js",
+    "main.js": "/Tender/static/js/main.a45d71d7.js",
     "static/js/453.5102921f.chunk.js": "/Tender/static/js/453.5102921f.chunk.js",
     "static/media/WhatsApp Image 2025-06-28 at 5.10.49 PM.jpeg": "/Tender/static/media/WhatsApp Image 2025-06-28 at 5.10.49 PM.c1522a89953661829aa6.jpeg",
     "static/media/TAT_Logo.jpeg": "/Tender/static/media/TAT_Logo.f3506ade23c4ee9b2fa1.jpeg",
     "index.html": "/Tender/index.html",
     "main.1628d6cf.css.map": "/Tender/static/css/main.1628d6cf.css.map",
-    "main.aba8650c.js.map": "/Tender/static/js/main.aba8650c.js.map",
+    "main.a45d71d7.js.map": "/Tender/static/js/main.a45d71d7.js.map",
     "453.5102921f.chunk.js.map": "/Tender/static/js/453.5102921f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1628d6cf.css",
-    "static/js/main.aba8650c.js"
+    "static/js/main.a45d71d7.js"
   ]
 }
