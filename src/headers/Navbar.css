@@ -1,5 +1,6 @@
 .navbar {
     color: black;
+    background-color: thistle;
     .corner {
         margin-right: 0px;
     }

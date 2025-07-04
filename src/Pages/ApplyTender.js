@@ -1,8 +1,8 @@
-import './Application.css';
+import './ApplyTender.css';
 import { useState } from 'react';
 import Select from 'react-select';
 
-const Applications = () => {
+const ApplyTender = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -18,6 +18,7 @@ const Applications = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const token = localStorage.getItem('token');
@@ -48,6 +49,9 @@ const Applications = () => {
     } catch (error) {
       console.error("Error parsing response", error);
       alert("Something went wrong while submitting the tender.");
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -108,6 +112,7 @@ const Applications = () => {
     "Machinery & Industrial Supplies"
   ];
 
+  const [loading, setLoading] = useState(false);
   return (
     <div className="tender-container">
       <h1>Create New Tender</h1>
@@ -192,10 +197,16 @@ const Applications = () => {
           }}
         />
 
-        <button type="submit">Publish Tender</button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Publishing..." : "Publidh Tender"}
+          </button>
+        </div>
+
+        {loading ? <div style={{ marginTop: '10px' }}><h6 style={{ display: 'flex', justifyContent: "center" }}>This may take a few seconds due to hosting on free services of github</h6></div> : ""}
       </form>
     </div>
   );
 };
 
-export default Applications;
+export default ApplyTender;

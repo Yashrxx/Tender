@@ -199,25 +199,26 @@ const Profile = () => {
         </div>
 
         {(!profileExists || isEditing) && (
-          <div className="button-wrapper">
-            <button type="submit" className="save-button">
-              {profileExists ? 'Save Changes' : 'Create Profile'}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+              {loading ? "Publishing..." : profileExists ? "Save Changes" : "Create Profile"}
             </button>
           </div>
         )}
       </form>
 
       {profileExists && !isEditing && (
-        <div className="button-wrapper">
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="edit-button"
+            className="btn btn-primary"
           >
-            Edit
+            Edit Profile
           </button>
         </div>
       )}
+
     </div>
   );
 };

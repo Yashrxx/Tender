@@ -86,4 +86,27 @@ router.get('/allTenders', async (req, res) => {
   }
 });
 
+// ✅ GET tender by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const tender = await Tender.findByPk(req.params.id, {
+      include: [
+        {
+          model: Company,
+          attributes: ['name', 'phone'],
+        },
+      ],
+    });
+
+    if (!tender) {
+      return res.status(404).json({ error: 'Tender not found' });
+    }
+
+    res.json(tender);
+  } catch (err) {
+    console.error("Error fetching tender by ID:", err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 module.exports = router;

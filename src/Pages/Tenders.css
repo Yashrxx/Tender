@@ -149,3 +149,17 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.apply-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.apply-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

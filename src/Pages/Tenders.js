@@ -1,5 +1,6 @@
-import { Fragment, useContext, useEffect, useState, useRef } from 'react';
+import { Fragment , useEffect, useState, useRef } from 'react';
 import './Tenders.css';
+import { useNavigate } from 'react-router-dom';
 
 const Tenders = () => {
   const [allTenders, setAllTenders] = useState([]);
@@ -13,6 +14,7 @@ const Tenders = () => {
     status: 'All',
     date: 'All'
   });
+  const navigate = useNavigate();
 
   const rowRefs = useRef([]);
 
@@ -22,7 +24,6 @@ const Tenders = () => {
         const res = await fetch('https://tender-56x1.onrender.com/api/tenderRoutes/allTenders');
         const data = await res.json();
 
-        // Ensure array response
         if (Array.isArray(data)) {
           setAllTenders(data);
           setFilteredTenders(data);
@@ -97,6 +98,10 @@ const Tenders = () => {
     }));
   };
 
+  const handleApply = async (tenderId) => {
+  navigate(`/apply/${tenderId}`)
+    }
+
   const uniqueCategories = ['All', ...new Set(allTenders.map(t => t.category).filter(Boolean))];
   const uniqueLocations = ['All', ...new Set(allTenders.map(t => t.location).filter(Boolean))];
   const uniqueStatuses = ['All', ...new Set(allTenders.map(t => t.status).filter(Boolean))];
@@ -164,61 +169,80 @@ const Tenders = () => {
                   <th>Location</th>
                   <th>Status</th>
                   <th>Deadline</th>
+                  <th>Apply</th>
                 </tr>
               </thead>
-              <tbody>
-                {filteredTenders.map((tender, index) => (
-                  <Fragment key={tender.id}>
-                    <tr
-                      onClick={() => handleRowClick(index)}
-                      className="cursor-pointer"
-                      ref={el => rowRefs.current[index] = el}
-                    >
-                      <td>{tender.title}</td>
-                      <td className="text-blue">{tender.category}</td>
-                      <td className="text-blue">{tender.location}</td>
-                      <td><span className="status-badge">{tender.status}</span></td>
-                      <td>{formatDate(tender.deadline)}</td>
-                    </tr>
 
-                    {expandedRow === index && (
-                      <tr>
-                        <td colSpan="5">
-                          <div className="dropdown-details">
-                            <p>
-                              <strong>Description:</strong>{' '}
-                              {expandedDescriptions[index]
-                                ? tender.description
-                                : `${tender.description.slice(0, 200)}...`}
-                            </p>
-                            {tender.company ? (
-                              <>
-                                <p><strong>Company:</strong> {tender.company.name}</p>
-                                <p><strong>Phone:</strong> {tender.company.phone}</p>
-                              </>
-                            ) : (
-                              <>
-                                <p><strong>Company:</strong> Not provided</p>
-                                <p><strong>Phone:</strong> Not available</p>
-                              </>
-                            )}
-                            <p><strong>Budget:</strong> ₹{tender.budget}</p>
-                          </div>
-                          {tender.description.length > 200 && (
-                            <div className="view-more-container">
-                              <button
-                                className="view-more-btn"
-                                onClick={() => toggleDescription(index)}
-                              >
-                                {expandedDescriptions[index] ? 'View Less ↑' : 'View More →'}
-                              </button>
-                            </div>
-                          )}
+              <tbody>
+                {filteredTenders.map((tender, index) => {
+                  const isClosed = new Date(tender.deadline) < new Date();
+                  return (
+                    <Fragment key={tender.id}>
+                      <tr
+                        onClick={() => handleRowClick(index)}
+                        className="cursor-pointer"
+                        ref={el => rowRefs.current[index] = el}
+                      >
+                        <td>{tender.title}</td>
+                        <td className="text-blue">{tender.category}</td>
+                        <td className="text-blue">{tender.location}</td>
+                        <td><span className="status-badge">{tender.status}</span></td>
+                        <td style={{ fontWeight: isClosed ? 'bold' : 'normal', color: isClosed ? 'red' : 'inherit' }}>
+                          {isClosed ? "Application Closed" : formatDate(tender.deadline)}
+                        </td>
+                        <td>
+                          <button
+                            className="apply-btn"
+                            disabled={isClosed}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleApply(tender.id);
+                            }}
+                          >
+                            Apply
+                          </button>
                         </td>
                       </tr>
-                    )}
-                  </Fragment>
-                ))}
+
+                      {expandedRow === index && (
+                        <tr>
+                          <td colSpan="6">
+                            <div className="dropdown-details">
+                              <p>
+                                <strong>Description:</strong>{' '}
+                                {expandedDescriptions[index]
+                                  ? tender.description
+                                  : `${tender.description.slice(0, 200)}...`}
+                              </p>
+                              {tender.company ? (
+                                <>
+                                  <p><strong>Company:</strong> {tender.company.name}</p>
+                                  <p><strong>Phone:</strong> {tender.company.phone}</p>
+                                </>
+                              ) : (
+                                <>
+                                  <p><strong>Company:</strong> Not provided</p>
+                                  <p><strong>Phone:</strong> Not available</p>
+                                </>
+                              )}
+                              <p><strong>Budget:</strong> ₹{tender.budget}</p>
+                            </div>
+                            {tender.description.length > 200 && (
+                              <div className="view-more-container">
+                                <button
+                                  className="view-more-btn"
+                                  onClick={() => toggleDescription(index)}
+                                >
+                                  {expandedDescriptions[index] ? 'View Less ↑' : 'View More →'}
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
           )}

@@ -3,32 +3,30 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* body {
-  margin: 0;
-  background-color: #f5f6fa;
-  padding: 40px;
-} */
-
 .company-page {
   max-width: 1200px;
   margin: auto;
+  padding: 40px 20px; /* Add padding for mobile */
 }
 
 .company-page h1 {
   font-size: 36px;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
+  text-align: center; /* Center heading */
 }
 
 .search-bar {
   width: 100%;
   padding: 14px 20px;
-  border-radius: 16px;
+  border-radius: 12px;
   border: none;
   font-size: 16px;
   background-color: #e9ebf8;
-  margin-bottom: 30px;
+  margin: 0 auto 30px auto;
   outline: none;
+  display: block;
+  max-width: 600px;
 }
 
 .company-page h3 {
@@ -40,46 +38,82 @@
 .industry-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 30px;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  justify-content: center;
+  padding: 0 1rem;
 }
 
 .industry-tags span {
-  background-color: #e4e6f1;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  background-color: #f1f5f9; /* Light indigo */
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
   font-weight: 500;
+  color: #1e293b;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .industry-tags span:hover {
-  background-color: #d2d6e7;
+  background-color: #e0e7ff;
+  color: #1d4ed8;
+  transform: scale(1.05);
+}
+
+@media (max-width: 500px) {
+  .industry-tags {
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .industry-tags span {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
+  }
 }
 
 .company-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 24px;
   margin-bottom: 40px;
+  padding: 0 10px;
 }
 
-.company-grid img {
-  width: 100%;
-  border-radius: 16px;
-  object-fit: cover;
+.company-card {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 200px;
+  padding: 10px;
+}
+.company-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.company-card h4 {
+  font-size: 16px;
+  margin: 10px 0 4px;
+}
+
+.company-card p {
+  font-size: 14px;
+  color: #666;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
   padding: 8px 14px;
-  border-radius: 50%;
+  border-radius: 8px;
   border: none;
   background-color: #e4e6f1;
   font-size: 14px;
@@ -106,4 +140,16 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1024px) {
+  .company-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .company-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

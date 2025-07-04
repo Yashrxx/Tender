@@ -42,7 +42,7 @@ const Dashboard = () => {
         });
         const data = await res.json();
         console.log("Fetched company tenders:", data);
-        setTenders(data);
+        setTenders(data || []);
       } catch (err) {
         console.error("Error fetching company's tenders:", err);
       }

@@ -4,13 +4,14 @@ import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
 import Dashboard from "./Pages/Dashboard";
 import Tenders from "./Pages/Tenders";
-import Applications from "./Pages/Applications";
+import ApplyTender from "./Pages/ApplyTender";
 import Search from "./Pages/Search";
 import Navbar from "./headers/Navbar";
 import Profile from "./Pages/Profile";
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './context/userContext';
 import CompanyDetails from "./Pages/companyDetails";
+import Application from "./Pages/Application";
 
 function App() {
   const { setIsAuthenticated, username } = useContext(UserContext);
@@ -54,8 +55,9 @@ function App() {
         <Route path="/company/:id" element={<CompanyDetails />} />
         <Route path="/dashboard" element={<Dashboard mode={mode}/>} />
         <Route path="/tenders" element={<Tenders mode={mode}/>} />
-        <Route path="/applications" element={<Applications mode={mode}/>} />
+        <Route path="/applyTender" element={<ApplyTender mode={mode}/>} />
         <Route path="/search" element={<Search mode={mode}/>} />
+        <Route path="/apply/:id" element={<Application />} />
       </Routes>
     </Router>
   );

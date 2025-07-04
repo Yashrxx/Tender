@@ -15,7 +15,7 @@ const Search = () => {
     const fetchCompanies = async () => {
       setLoading(true); // Start loading
       try {
-        const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/search?query=${query}&page=${page}`);
+        const res = await fetch(`https://tender-56x1.onrender.com/api/companyRoutes/search?query=${encodeURIComponent(query)}&page=${page}`);
         const data = await res.json();
         setCompanies(data.results || []);
         setTotalPages(data.totalPages || 1);
@@ -49,15 +49,27 @@ const Search = () => {
         value={query}
         onChange={handleInputChange}
       />
-
       <h3>Browse by Industry</h3>
       <div className="industry-tags">
         {[
-          'Technology', 'Healthcare', 'Finance', 'Manufacturing', 'Retail',
-          'Energy', 'Transportation', 'Agriculture', 'Education', 'Government'
-        ].map((industry) => (
-          <span key={industry} onClick={() => { setQuery(industry); setPage(1); }}>
-            {industry}
+          { label: 'Construction', value: 'Construction & Civil Works' },
+          { label: 'IT', value: 'Information Technology (IT)' },
+          { label: 'Electrical Works', value: 'Electrical Equipment & Works' },
+          { label: 'Healthcare', value: 'Healthcare & Medical Equipment' },
+          { label: 'Roads', value: 'Roads & Bridges' },
+          { label: 'Education', value: 'Education & Training' },
+          { label: 'Consultancy', value: 'Consultancy Services' },
+          { label: 'Agriculture', value: 'Agriculture & Allied Services' },
+          { label: 'Logistics', value: 'Transportation & Logistics' },
+          { label: 'Telecom', value: 'Telecommunications' },
+          { label: 'Security', value: 'Security Services' },
+          { label: 'Water Supply', value: 'Water Supply & Sanitation' },
+          { label: 'Office Supplies', value: 'Office Equipment & Stationery' },
+          { label: 'Environment', value: 'Environmental Services' },
+          { label: 'Machinery', value: 'Machinery & Industrial Supplies' }
+        ].map(({ label, value }) => (
+          <span key={value} onClick={() => { setQuery(value); setPage(1); }}>
+            {label}
           </span>
         ))}
       </div>
@@ -68,7 +80,7 @@ const Search = () => {
       ) : (
         <div className="company-grid">
           {companies.length > 0 ? (
-            companies.map((company, index) => (
+            companies.slice(0, 12).map((company, index) => (
               <div
                 key={index}
                 className="company-card"

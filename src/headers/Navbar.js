@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import { UserContext } from '../context/userContext';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TAT from '../assets/img/TAT_Logo.jpeg'
-
+import './Navbar.css'
 const Navbar = (props) => {
     const navigate = useNavigate();
     const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(UserContext);
@@ -41,7 +41,7 @@ const Navbar = (props) => {
 
                         {isAuthenticated && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="/applications">Applications</Link>
+                                <Link className="nav-link" to="/applyTender">ApplyTender</Link>
                             </li>
                         )}
                         {isAuthenticated && (
@@ -57,6 +57,11 @@ const Navbar = (props) => {
                         {isAuthenticated && (
                             <li className="nav-item">
                                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                            </li>
+                        )}
+                        {isAuthenticated && (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/application">Application</Link>
                             </li>
                         )}
                         {/* {isAuthenticated && (
