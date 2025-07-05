@@ -36,7 +36,7 @@ const Tender = sequelize.define('Tender', {
   },
   company_id: {
     type: DataTypes.INTEGER,
-    allowNull: true, // if not always provided
+    allowNull: true,
   },
   createdAt: {
     type: DataTypes.DATE,

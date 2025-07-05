@@ -8,7 +8,7 @@ const { Op } = require('sequelize');
 router.get('/', async (req, res) => {
   try {
     const totalTenders = await Tender.count();
-    const openTenders = await Tender.count({ where: { stage: 'open' } });
+    const openTenders = await Tender.count({ where: { status: 'open' } });
     const totalCompanies = await Company.count();
     const totalApplications = await Application.count();
 
