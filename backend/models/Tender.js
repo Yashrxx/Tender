@@ -33,10 +33,18 @@ const Tender = sequelize.define('Tender', {
   user_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'users', // ✅ lowercase table name
+      key: 'id'
+    }
   },
   company_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    references: {
+      model: 'companies',
+      key: 'id'
+    }
   },
   createdAt: {
     type: DataTypes.DATE,
