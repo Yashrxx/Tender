@@ -34,7 +34,7 @@ const Tender = sequelize.define('Tender', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users', // ✅ lowercase table name
+      model: 'users',
       key: 'id'
     }
   },

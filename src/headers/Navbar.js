@@ -41,7 +41,7 @@ const Navbar = (props) => {
 
                         {isAuthenticated && (
                             <li className="nav-item">
-                                <Link className="nav-link" to="/applyTender">ApplyTender</Link>
+                                <Link className="nav-link" to="/applyTender">FileTender</Link>
                             </li>
                         )}
                         {isAuthenticated && (
