@@ -5,10 +5,10 @@ const Company = require('../models/Company');
 const Application = require('../models/Application');
 const { Op } = require('sequelize');
 
-router.get('/stats', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const totalTenders = await Tender.count();
-    const openTenders = await Tender.count({ where: { stage: 'open' } }); // adjust if your column name differs
+    const openTenders = await Tender.count({ where: { stage: 'open' } });
     const totalCompanies = await Company.count();
     const totalApplications = await Application.count();
 

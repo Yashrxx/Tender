@@ -21,7 +21,6 @@ const Analytics = (props) => {
   };
 
   const fetchTenderChartData = async () => {
-    // TODO: replace this with your real /api/tender/yearly-count (if available)
     setChartData([
       { year: "2020-21", tenders: 42476 },
       { year: "2021-22", tenders: 28896 },
